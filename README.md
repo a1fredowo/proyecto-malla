@@ -6,7 +6,7 @@ Desarrollador de componentes
 - Alfredo Hernández (@a1fredowo)
   
 Diseñadora  
-- Valentina Manríquez  
+- Valentina Manríquez  (@wbyvale)
   
 Integrador  
 - Simón Jiménez (@SyCTsubasa)
