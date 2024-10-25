@@ -3,7 +3,7 @@ El proyecto consiste en una malla interactiva de las carreras de la Universidad 
 
 ## Integrantes 
 Desarrollador de componentes
-- Alfredo Hernández  
+- Alfredo Hernández (@a1fredowo)
   
 Diseñadora  
 - Valentina Manríquez  
