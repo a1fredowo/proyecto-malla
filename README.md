@@ -9,4 +9,4 @@ Diseñadora
 - Valentina Manríquez  
   
 Integrador  
-- Simón Jiménez
+- Simón Jiménez (@SyCTsubasa)
