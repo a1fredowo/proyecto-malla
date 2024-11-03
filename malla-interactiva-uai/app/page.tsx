@@ -1,27 +1,16 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Header from './components/header';
-import Progress from './components/progress';
+import ProgressSummary from './components/progress';
 import mallasData from './data/mallas';
 import './styles.css';
-
-interface Course {
-  id: number;
-  semester: number;
-  name: string;
-  core: boolean;
-  code: string;
-  credits: number;
-  prerequisites: number[];
-}
-
-interface Mallas {
-  [key: string]: Course[];
-}
+import { LanguageProvider, useLanguage } from './components/LanguageContext';
+import { translations } from './data/translations';
 
 const years = ["Año 1", "Año 1", "Año 2", "Año 2", "Año 3", "Año 3", "Año 4", "Año 4", "Año 5"];
 
 const App: React.FC = () => {
+  const { language } = useLanguage() as { language: keyof typeof translations };
   const [completedCourses, setCompletedCourses] = useState<number[]>([]);
   const [unlockedCourses, setUnlockedCourses] = useState<number[]>([]);
   const [approvedCredits, setApprovedCredits] = useState(0);
@@ -30,8 +19,9 @@ const App: React.FC = () => {
   const [totalCoursesPercentage, setTotalCoursesPercentage] = useState(0);
   const [selectedMalla, setSelectedMalla] = useState<string>('Ing. Civil Informática');
 
-  const mallas: Mallas = mallasData;
-  const courses = mallas[selectedMalla];
+  type MallaKey = keyof typeof mallasData;
+  const mallas = mallasData;
+  const courses = mallas[selectedMalla as MallaKey];
 
   useEffect(() => {
     const initiallyUnlockedCourses = courses
@@ -78,7 +68,7 @@ const App: React.FC = () => {
   const handleMallaChange = (malla: string) => {
     setSelectedMalla(malla);
     setCompletedCourses([]);
-    const initiallyUnlockedCourses = mallas[malla]
+    const initiallyUnlockedCourses = mallas[malla as MallaKey]
       .filter(course => course.prerequisites.length === 0)
       .map(course => course.id);
     setUnlockedCourses(initiallyUnlockedCourses);
@@ -92,14 +82,15 @@ const App: React.FC = () => {
     <div className="text-center bg-black text-white min-h-screen flex flex-col items-center font-sans">
       <Header mallas={Object.keys(mallas)} selectedMalla={selectedMalla} onSelectMalla={handleMallaChange} />
 
-      {/* Malla interactiva directamente en App.tsx */}
       <div className="grid grid-cols-9 gap-px justify-start w-11/12 overflow-x-auto transition-all duration-300 mt-4">
         {years.map((year, index) => (
-          <div key={index} className="text-center bg-gray-800 p-px text-white border border-blue-400">{year}</div>
+          <div key={index} className="text-center bg-gray-800 p-px text-white border border-blue-400">
+            {translations[language].malla.año} {Math.floor(index / 2) + 1}
+          </div>
         ))}
         {[...Array(9)].map((_, semester) => (
           <div key={semester} className="border border-blue-400 bg-gray-800 p-1">
-            <h2 className="mb-2 text-xs">Semestre {semester + 1}</h2>
+            <h2 className="mb-2 text-xs">{translations[language].malla.semestre} {semester + 1}</h2>
             <div className="flex flex-col items-center">
               {courses
                 .filter(course => course.semester === semester + 1)
@@ -112,18 +103,13 @@ const App: React.FC = () => {
                       ${unlockedCourses.includes(course.id) ? 'opacity-100' : 'opacity-50'}`}
                     onClick={() => toggleCourseCompletion(course.id)}
                   >
-                    {/* Código del curso y créditos en tamaño pequeño */}
                     <div className="flex justify-between text-xs text-blue-400">
                       <span>{course.code}</span>
-                      <span>{course.credits} Créditos</span>
+                      <span>{course.credits} {translations[language].malla.creditos}</span>
                     </div>
-
-                    {/* Nombre del curso en un tamaño mayor para resaltar */}
                     <div className="text-center mt-1 mb-1 text-blue-300 font-semibold text-base">
                       {course.name}
                     </div>
-
-                    {/* Prerrequisitos en tamaño pequeño */}
                     <div className="text-xs mt-1 text-blue-400">Prerequisitos: {course.prerequisites.length}</div>
                   </div>
                 ))}
@@ -132,7 +118,7 @@ const App: React.FC = () => {
         ))}
       </div>
 
-      <Progress
+      <ProgressSummary
         approvedCredits={approvedCredits}
         totalCreditsPercentage={totalCreditsPercentage}
         totalCoursesCompleted={totalCoursesCompleted}
@@ -142,4 +128,10 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+const AppWrapper: React.FC = () => (
+  <LanguageProvider>
+    <App />
+  </LanguageProvider>
+);
+
+export default AppWrapper;
