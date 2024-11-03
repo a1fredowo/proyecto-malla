@@ -1,0 +1,17 @@
+/* Aplicar responsividad a la malla interactiva */
+  .grid-cols-9 {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+  }
+  
+  /* Responsivo: Desktop */
+  @media (min-width: 1200px) {
+    .course-card {
+      width: 100%;
+    }
+  }
+  
+
+
+  
+  

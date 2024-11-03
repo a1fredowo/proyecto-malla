@@ -13,7 +13,7 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
   totalCoursesCompleted,
   totalCoursesPercentage,
 }) => (
-  <div className="text-center w-11/12 mt-8">
+  <div className="text-center w-full md:w-11/12 mt-8 text-sm md:text-base lg:text-lg">
     <p>
       Créditos aprobados: {approvedCredits} ({Math.round(totalCreditsPercentage)}%), Total ramos: {totalCoursesCompleted} ({Math.round(totalCoursesPercentage)}%)
     </p>

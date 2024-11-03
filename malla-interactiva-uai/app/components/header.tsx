@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ mallas, selectedMalla, onSelectMalla })
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
 
   return (
-    <header className="bg-gray-800 p-5 w-full flex justify-between items-center border-b-2 border-blue-400">
+    <header className="bg-gray-800 p-5 w-full flex flex-col md:flex-row justify-between items-center border-b-2 border-blue-400">
       <nav className="flex space-x-6 items-center">
         <h1 className="text-lg font-bold">Malla {selectedMalla}</h1>
         <div className="relative">
@@ -49,14 +49,14 @@ const Header: React.FC<HeaderProps> = ({ mallas, selectedMalla, onSelectMalla })
           Contacto
         </Link>
       </nav>
-      <Link href="https://ingenieria.uai.cl">
+      <Link href="https://ingenieria.uai.cl" className="mt-4 md:mt-0">
         <Image
           src="/logo.png"
           alt="Logo"
-          className="cursor-pointer"
-          width={256}
+          width={320}
           height={100}
-          style={{ height: '50px' }} // Estilo en lÃ­nea para asegurar el cambio
+          style={{ height: '60px' }}
+          className="cursor-pointer"
         />
       </Link>
     </header>

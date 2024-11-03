@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Header from './components/header';
 import Progress from './components/progress';
 import mallasData from './data/mallas';
+import './styles.css';
 
-// Definición de interfaces para los tipos de datos
 interface Course {
   id: number;
   semester: number;
@@ -99,7 +99,7 @@ const App: React.FC = () => {
         ))}
         {[...Array(9)].map((_, semester) => (
           <div key={semester} className="border border-blue-400 bg-gray-800 p-1">
-            <h2 className="mb-2">Semestre {semester + 1}</h2>
+            <h2 className="mb-2 text-xs">Semestre {semester + 1}</h2>
             <div className="flex flex-col items-center">
               {courses
                 .filter(course => course.semester === semester + 1)
@@ -112,12 +112,19 @@ const App: React.FC = () => {
                       ${unlockedCourses.includes(course.id) ? 'opacity-100' : 'opacity-50'}`}
                     onClick={() => toggleCourseCompletion(course.id)}
                   >
-                    <div className="flex justify-between">
+                    {/* Código del curso y créditos en tamaño pequeño */}
+                    <div className="flex justify-between text-xs text-blue-400">
                       <span>{course.code}</span>
                       <span>{course.credits} Créditos</span>
                     </div>
-                    <div>{course.name}</div>
-                    <div className="text-xs mt-1">Prerequisitos: {course.prerequisites.length}</div>
+
+                    {/* Nombre del curso en un tamaño mayor para resaltar */}
+                    <div className="text-center mt-1 mb-1 text-blue-300 font-semibold text-base">
+                      {course.name}
+                    </div>
+
+                    {/* Prerrequisitos en tamaño pequeño */}
+                    <div className="text-xs mt-1 text-blue-400">Prerequisitos: {course.prerequisites.length}</div>
                   </div>
                 ))}
             </div>
