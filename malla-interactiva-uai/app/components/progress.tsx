@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLanguage } from './LanguageContext';
+import { useLanguage } from '../components/LanguageContext';
 import { translations } from '../data/translations';
 
 interface ProgressSummaryProps {
@@ -18,7 +18,7 @@ const ProgressSummary: React.FC<ProgressSummaryProps> = ({
   const { language } = useLanguage() as { language: 'es' | 'en' };
 
   return (
-    <div className="text-center w-full md:w-11/12 mt-8 text-sm md:text-base">
+    <div className="text-center w-full md:w-11/12 mt-8 text-sm md:text-base lg:text-lg">
       <p>
         {translations[language].progress.approvedCredits}: {approvedCredits} ({Math.round(totalCreditsPercentage)}%), {translations[language].progress.totalCoursesCompleted}: {totalCoursesCompleted} ({Math.round(totalCoursesPercentage)}%)
       </p>

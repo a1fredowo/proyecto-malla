@@ -82,7 +82,7 @@ const App: React.FC = () => {
     <div className="text-center bg-black text-white min-h-screen flex flex-col items-center font-sans">
       <Header mallas={Object.keys(mallas)} selectedMalla={selectedMalla} onSelectMalla={handleMallaChange} />
 
-      <div className="grid grid-cols-9 gap-px justify-start w-11/12 overflow-x-auto transition-all duration-300 mt-4">
+      <div className="grid grid-cols-9 gap-px justify-start w-11/12 overflow-x-auto transition-all duration-300 mt-10">
         {years.map((year, index) => (
           <div key={index} className="text-center bg-gray-800 p-px text-white border border-blue-400">
             {translations[language].malla.año} {Math.floor(index / 2) + 1}
@@ -97,9 +97,9 @@ const App: React.FC = () => {
                 .map(course => (
                   <div
                     key={course.id}
-                    className={`w-full p-2 mb-2 text-sm rounded border cursor-pointer hover:bg-gray-600 hover:shadow-lg
+                    className={`relative w-full p-2 mb-2 text-sm rounded border cursor-pointer hover:bg-gray-600 hover:shadow-lg
                       ${course.core ? 'bg-gray-700' : 'bg-gray-800'} 
-                      ${completedCourses.includes(course.id) ? 'line-through' : ''} 
+                      ${completedCourses.includes(course.id) ? 'completed' : ''} 
                       ${unlockedCourses.includes(course.id) ? 'opacity-100' : 'opacity-50'}`}
                     onClick={() => toggleCourseCompletion(course.id)}
                   >
@@ -107,10 +107,11 @@ const App: React.FC = () => {
                       <span>{course.code}</span>
                       <span>{course.credits} {translations[language].malla.creditos}</span>
                     </div>
-                    <div className="text-center mt-1 mb-1 text-blue-300 font-semibold text-base">
+                    <div className="text-center mt-1 mb-1 text-blue-300 font-semibold text-sm">
                       {course.name}
                     </div>
                     <div className="text-xs mt-1 text-blue-400">Prerequisitos: {course.prerequisites.length}</div>
+                    {completedCourses.includes(course.id) && <div className="strike-through"></div>}
                   </div>
                 ))}
             </div>
