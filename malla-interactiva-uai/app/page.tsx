@@ -1,15 +1,21 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Header from './components/header';
-import ProgressSummary from './components/progress';
-import mallasData from './data/mallas';
-import './styles.css';
-import { LanguageProvider, useLanguage } from './components/LanguageContext';
-import { translations } from './data/translations';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Header from '../components/header';
+import ProgressSummary from '../components/progress';
+import mallasData from '../data/mallas';
+import '../styles/styles.css';
+import { LanguageProvider, useLanguage } from '../components/LanguageContext';
+import { translations } from '../data/translations';
 
 const years = ["Año 1", "Año 1", "Año 2", "Año 2", "Año 3", "Año 3", "Año 4", "Año 4", "Año 5"];
 
-const App: React.FC = () => {
+type MallaKey = keyof typeof mallasData;
+
+const MainContent: React.FC<{ selectedMalla: string; setSelectedMalla: (malla: string) => void }> = ({
+  selectedMalla,
+  setSelectedMalla,
+}) => {
   const { language } = useLanguage() as { language: keyof typeof translations };
   const [completedCourses, setCompletedCourses] = useState<number[]>([]);
   const [unlockedCourses, setUnlockedCourses] = useState<number[]>([]);
@@ -17,9 +23,7 @@ const App: React.FC = () => {
   const [totalCreditsPercentage, setTotalCreditsPercentage] = useState(0);
   const [totalCoursesCompleted, setTotalCoursesCompleted] = useState(0);
   const [totalCoursesPercentage, setTotalCoursesPercentage] = useState(0);
-  const [selectedMalla, setSelectedMalla] = useState<string>('Ing. Civil Informática');
 
-  type MallaKey = keyof typeof mallasData;
   const mallas = mallasData;
   const courses = mallas[selectedMalla as MallaKey];
 
@@ -65,22 +69,13 @@ const App: React.FC = () => {
     calculateProgress(newCompletedCourses);
   };
 
-  const handleMallaChange = (malla: string) => {
-    setSelectedMalla(malla);
-    setCompletedCourses([]);
-    const initiallyUnlockedCourses = mallas[malla as MallaKey]
-      .filter(course => course.prerequisites.length === 0)
-      .map(course => course.id);
-    setUnlockedCourses(initiallyUnlockedCourses);
-    setApprovedCredits(0);
-    setTotalCreditsPercentage(0);
-    setTotalCoursesCompleted(0);
-    setTotalCoursesPercentage(0);
-  };
-
   return (
     <div className="text-center bg-black text-white min-h-screen flex flex-col items-center font-sans">
-      <Header mallas={Object.keys(mallas)} selectedMalla={selectedMalla} onSelectMalla={handleMallaChange} />
+      <Header
+        mallas={Object.keys(mallas)}
+        selectedMalla={selectedMalla}
+        onSelectMalla={setSelectedMalla} // Permite cambiar la malla seleccionada
+      />
 
       <div className="grid grid-cols-9 gap-px justify-start w-11/12 overflow-x-auto transition-all duration-300 mt-10">
         {years.map((year, index) => (
@@ -127,6 +122,28 @@ const App: React.FC = () => {
       />
     </div>
   );
+};
+
+const App: React.FC = () => {
+  const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [selectedMalla, setSelectedMalla] = useState<string>('Ing. Civil Informática');
+
+  // Verificar autenticación al cargar la página
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated') === 'true';
+    if (!authStatus) {
+      router.push('/login'); // Redirige a /login si no está autenticado
+    } else {
+      setIsAuthenticated(true);
+    }
+  }, [router]);
+
+  if (!isAuthenticated) {
+    return null; // Evita renderizar MainContent mientras redirige
+  }
+
+  return <MainContent selectedMalla={selectedMalla} setSelectedMalla={setSelectedMalla} />;
 };
 
 const AppWrapper: React.FC = () => (

@@ -1,6 +1,7 @@
 "use client";
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useLanguage } from './LanguageContext';
@@ -15,6 +16,13 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ mallas, selectedMalla, onSelectMalla }) => {
   const { language, setLanguage } = useLanguage() as { language: 'es' | 'en', setLanguage: (lang: 'es' | 'en') => void };
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const router = useRouter();
+
+  // Función para cerrar sesión
+  const handleLogout = () => {
+    localStorage.removeItem('isAuthenticated'); // Elimina el estado de autenticación
+    router.push('/login'); // Redirige al usuario a la página de login
+  };
 
   return (
     <header className="bg-gray-800 p-5 w-full flex flex-col md:flex-row justify-between items-center border-b-2 border-blue-400">
@@ -55,6 +63,15 @@ const Header: React.FC<HeaderProps> = ({ mallas, selectedMalla, onSelectMalla })
         </Link>
       </nav>
       <div className="flex items-center space-x-4">
+        {/* Botón de Logout */}
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded"
+        >
+          Logout
+        </button>
+        
+        {/* Selector de Idioma */}
         <span>{translations[language].header.idioma}:</span>
         <select
           value={language}
