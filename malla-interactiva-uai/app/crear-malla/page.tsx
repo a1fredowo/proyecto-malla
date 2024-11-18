@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import mallasData from '../../data/mallas';
 import { translations } from '../../data/translations';
 import { LanguageProvider, useLanguage } from '../../components/LanguageContext';
@@ -19,9 +19,9 @@ const CrearMalla: React.FC = () => {
   const { language } = useLanguage() as { language: 'es' | 'en' };
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
-  const [semester, setSemester] = useState(5); // Starting from the 5th semester
-  const [nextId, setNextId] = useState(1);
+  const [selectedSemester, setSelectedSemester] = useState<number>(5); // Starting from the 5th semester
   const [selectedMalla, setSelectedMalla] = useState<string>('Ing. Civil Informática');
+  const [nextId, setNextId] = useState(1);
 
   const mallas = mallasData;
   const predefinedCourses = mallas[selectedMalla as keyof typeof mallasData].filter(course => course.semester <= 4);
@@ -34,7 +34,7 @@ const CrearMalla: React.FC = () => {
         const newCourse: Course = {
           ...selectedCourse,
           id: nextId,
-          semester,
+          semester: selectedSemester,
         };
         setCourses([...courses, newCourse]);
         setNextId(nextId + 1);
@@ -44,8 +44,12 @@ const CrearMalla: React.FC = () => {
   };
 
   const handleAddYear = () => {
-    setSemester(semester + 2); // Each year has 2 semesters
+    setSelectedSemester(selectedSemester + 2); // Each year has 2 semesters
   };
+
+  useEffect(() => {
+    setSelectedCourseId(null);
+  }, [selectedMalla]);
 
   return (
     <div className="text-center bg-black text-white min-h-screen flex flex-col items-center font-sans">
@@ -56,7 +60,7 @@ const CrearMalla: React.FC = () => {
       />
 
       <div className="grid grid-cols-9 gap-px justify-start w-11/12 overflow-x-auto transition-all duration-300 mt-10">
-        {Array.from({ length: semester }, (_, i) => i + 1).map((sem) => (
+        {Array.from({ length: selectedSemester }, (_, i) => i + 1).map((sem) => (
           <div key={sem} className="border border-blue-400 bg-gray-800 p-1">
             <h2 className="mb-2 text-xs">{translations[language].malla.semestre} {sem}</h2>
             <div className="flex flex-col items-center">
@@ -103,7 +107,35 @@ const CrearMalla: React.FC = () => {
 
       <div className="w-full max-w-md mt-8">
         <div className="mb-4">
-          <label className="block mb-1">Seleccionar Curso</label>
+          <label className="block mb-1">Semestre</label>
+          <select
+            value={selectedSemester}
+            onChange={(e) => setSelectedSemester(Number(e.target.value))}
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
+          >
+            {Array.from({ length: selectedSemester }, (_, i) => i + 1).map(sem => (
+              <option key={sem} value={sem}>
+                {translations[language].malla.semestre} {sem}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block mb-1">Carrera</label>
+          <select
+            value={selectedMalla}
+            onChange={(e) => setSelectedMalla(e.target.value)}
+            className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
+          >
+            {Object.keys(mallas).map(malla => (
+              <option key={malla} value={malla}>
+                {malla}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="mb-4">
+          <label className="block mb-1">Curso</label>
           <select
             value={selectedCourseId ?? ''}
             onChange={(e) => setSelectedCourseId(Number(e.target.value))}
