@@ -18,29 +18,29 @@ interface Course {
 const CrearMalla: React.FC = () => {
   const { language } = useLanguage() as { language: 'es' | 'en' };
   const [courses, setCourses] = useState<Course[]>([]);
-  const [courseName, setCourseName] = useState('');
+  const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
   const [semester, setSemester] = useState(5); // Starting from the 5th semester
-  const [credits, setCredits] = useState(0);
   const [nextId, setNextId] = useState(1);
   const [selectedMalla, setSelectedMalla] = useState<string>('Ing. Civil Informática');
 
   const mallas = mallasData;
   const predefinedCourses = mallas[selectedMalla as keyof typeof mallasData].filter(course => course.semester <= 4);
+  const availableCourses = mallas[selectedMalla as keyof typeof mallasData];
 
   const handleAddCourse = () => {
-    const newCourse: Course = {
-      id: nextId,
-      name: courseName,
-      semester,
-      credits,
-      core: false,
-      code: '',
-      prerequisites: [],
-    };
-    setCourses([...courses, newCourse]);
-    setNextId(nextId + 1);
-    setCourseName('');
-    setCredits(0);
+    if (selectedCourseId !== null) {
+      const selectedCourse = availableCourses.find(course => course.id === selectedCourseId);
+      if (selectedCourse) {
+        const newCourse: Course = {
+          ...selectedCourse,
+          id: nextId,
+          semester,
+        };
+        setCourses([...courses, newCourse]);
+        setNextId(nextId + 1);
+        setSelectedCourseId(null);
+      }
+    }
   };
 
   const handleAddYear = () => {
@@ -103,22 +103,19 @@ const CrearMalla: React.FC = () => {
 
       <div className="w-full max-w-md mt-8">
         <div className="mb-4">
-          <label className="block mb-1">Nombre del curso</label>
-          <input
-            type="text"
-            value={courseName}
-            onChange={(e) => setCourseName(e.target.value)}
+          <label className="block mb-1">Seleccionar Curso</label>
+          <select
+            value={selectedCourseId ?? ''}
+            onChange={(e) => setSelectedCourseId(Number(e.target.value))}
             className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block mb-1">Créditos</label>
-          <input
-            type="number"
-            value={credits}
-            onChange={(e) => setCredits(Number(e.target.value))}
-            className="w-full p-2 bg-gray-700 border border-gray-600 rounded"
-          />
+          >
+            <option value="" disabled>Selecciona un curso</option>
+            {availableCourses.map(course => (
+              <option key={course.id} value={course.id}>
+                {course.name} ({course.code})
+              </option>
+            ))}
+          </select>
         </div>
         <button
           onClick={handleAddCourse}
