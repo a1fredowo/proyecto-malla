@@ -24,7 +24,7 @@ const Contacto: React.FC = () => {
                 </div>
                 <div className="flex items-center">
                 <img src="/icons/user2.svg" alt="Creador 2" className="w-10 h-10 mr-4" />
-                <p>Nombre del Creador 2</p>
+                <p>Valentina Manríquez</p>
                 </div>
                 <div className="flex items-center">
                 <img src="/icons/user3.svg" alt="Creador 3" className="w-10 h-10 mr-4" />
