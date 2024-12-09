@@ -70,14 +70,14 @@ const MainContent: React.FC<{ selectedMalla: string; setSelectedMalla: (malla: s
   };
 
   return (
-    <div className="text-center bg-black text-white min-h-screen flex flex-col items-center font-sans">
+    <div className="text-center bg-black bg-no-repeat bg-cover text-white min-h-screen flex flex-col items-center font-sans" style={{ backgroundImage: "url('https://i.ytimg.com/vi/Xj4oH1qug4Q/maxresdefault.jpg')", opacity:0.8 }}>
       <Header
         mallas={Object.keys(mallas)}
         selectedMalla={selectedMalla}
         onSelectMalla={setSelectedMalla} // Permite cambiar la malla seleccionada
       />
 
-      <div className="grid grid-cols-9 gap-px justify-start w-11/12 overflow-x-auto transition-all duration-300 mt-10">
+      <div className="grid grid-cols-9 gap-px justify-start w-11/12 overflow-x-auto transition-all duration-300 mt-10 rounded-lg">
         {years.map((year, index) => (
           <div key={index} className="text-center bg-gray-800 p-px text-white border border-blue-400">
             {translations[language].malla.año} {Math.floor(index / 2) + 1}
