@@ -27,7 +27,11 @@ const Header: React.FC<HeaderProps> = ({ mallas, selectedMalla, onSelectMalla })
   return (
     <header className="bg-gray-800 p-5 w-full flex flex-col md:flex-row justify-between items-center border-b-2 border-blue-400">
       <nav className="flex space-x-6 items-center">
-        <h1 className="text-lg font-bold">Malla {selectedMalla}</h1>
+        <h1 className="text-lg font-bold">
+          <Link href={`/`} className="hover:text-blue-400">
+            Malla {selectedMalla}
+          </Link>
+        </h1>
         <div className="relative">
           <button
             className="hover:text-blue-400 focus:outline-none flex items-center"
