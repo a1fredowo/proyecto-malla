@@ -105,7 +105,7 @@ const MainContent: React.FC<{ selectedMalla: string; setSelectedMalla: (malla: s
                     <div className="text-center mt-1 mb-1 text-blue-300 font-semibold text-sm">
                       {course.name}
                     </div>
-                    <div className="text-xs mt-1 text-blue-400">Prerequisitos: {course.prerequisites.length}</div>
+                    <div className="text-xs mt-1 text-blue-400">{translations[language].malla.prerrequisitos}: {course.prerequisites.length}</div>
                     {completedCourses.includes(course.id) && <div className="strike-through"></div>}
                   </div>
                 ))}

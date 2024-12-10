@@ -84,7 +84,7 @@ const CrearMalla: React.FC = () => {
         {course.name}
       </div>
       <div className="text-xs mt-1 text-blue-400">
-        Prerequisitos: {course.prerequisites.length}
+      {translations[language].malla.prerrequisitos}: {course.prerequisites.length}
       </div>
       {completedCourses.includes(course.id) && <div className="strike-through"></div>}
     </div>
@@ -118,7 +118,7 @@ const CrearMalla: React.FC = () => {
 
       <div className="w-full max-w-md mt-8">
         <div className="mb-4">
-          <label className="block mb-1">Semestre</label>
+          <label className="block mb-1">{translations[language].malla.semestre}</label>
           <select
             value={selectedSemester}
             onChange={(e) => setSelectedSemester(Number(e.target.value))}
@@ -132,7 +132,7 @@ const CrearMalla: React.FC = () => {
           </select>
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Carrera</label>
+          <label className="block mb-1">{translations[language].header.carreras}</label>
           <select
             value={selectedMalla}
             onChange={(e) => setSelectedMalla(e.target.value)}
@@ -146,7 +146,7 @@ const CrearMalla: React.FC = () => {
           </select>
         </div>
         <div className="mb-4">
-          <label className="block mb-1">Curso</label>
+          <label className="block mb-1">{translations[language].malla.curso}</label>
           <select
             value={selectedCourseId ?? ""}
             onChange={(e) => setSelectedCourseId(Number(e.target.value))}
@@ -166,13 +166,13 @@ const CrearMalla: React.FC = () => {
           onClick={handleAddCourse}
           className="w-full p-2 bg-blue-500 hover:bg-blue-600 rounded text-white font-bold mb-4"
         >
-          Agregar Curso
+          {translations[language].malla.agregarCurso}
         </button>
         <button
           onClick={handleAddSemester}
           className="w-full p-2 bg-green-500 hover:bg-green-600 rounded text-white font-bold"
         >
-          Agregar Semestre
+          {translations[language].malla.agregarSemestre}
         </button>
       </div>
     </div>
