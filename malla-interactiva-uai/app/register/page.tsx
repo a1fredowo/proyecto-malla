@@ -1,38 +1,43 @@
-// app/register/page.tsx
 "use client";
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+
+import React, { useState } from "react";
+import { useRouter } from "next/navigation"; // Importa useRouter
+import Link from "next/link"; // Importa Link para la navegación
 
 const Register: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const handleRegister = (e: React.FormEvent) => {
+  const router = useRouter(); // Inicializa el hook useRouter
+
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
 
     try {
-      // Obtener usuarios existentes de localStorage
-      const usersData = localStorage.getItem('usuarios');
-      const users = usersData ? JSON.parse(usersData) : [];
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-      // Verificar si el usuario ya existe
-      const existingUser = users.find((user: { usuario: string }) => user.usuario === username);
-      if (existingUser) {
-        setError('El usuario ya existe');
-        return;
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Error al registrar");
 
-      // Guardar el nuevo usuario en localStorage
-      const newUser = { usuario: username, contraseña: password };
-      users.push(newUser);
-      localStorage.setItem('usuarios', JSON.stringify(users));
+      setSuccess("Usuario registrado correctamente");
 
       // Redirigir al usuario a la página de login
-      router.push('/login');
-    } catch {
-      setError('Error al registrar el usuario');
+      router.push("/login"); // Redirige al login
+
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || "Error en el servidor");
+      } else {
+        setError("Error en el servidor");
+      }
     }
   };
 
@@ -41,6 +46,7 @@ const Register: React.FC = () => {
       <form onSubmit={handleRegister} className="bg-gray-800 p-10 rounded shadow-lg w-80">
         <h2 className="text-xl font-bold mb-5">Registrarse</h2>
         {error && <p className="text-red-500 mb-3">{error}</p>}
+        {success && <p className="text-green-500 mb-3">{success}</p>}
         <div className="mb-4">
           <label className="block mb-1">Nombre de usuario</label>
           <input
@@ -67,14 +73,13 @@ const Register: React.FC = () => {
         >
           Registrarse
         </button>
-        <p className="mt-4 text-sm">
-          ¿Ya tienes una cuenta?{' '}
-          <span
-            onClick={() => router.push('/login')}
-            className="text-blue-400 cursor-pointer hover:underline"
-          >
+
+        {/* Enlace para redirigir al login */}
+        <p className="mt-4 text-center text-gray-400">
+          ¿Ya tienes una cuenta?{" "}
+          <Link href="/login" className="text-blue-500 hover:underline">
             Inicia sesión
-          </span>
+          </Link>
         </p>
       </form>
     </div>
