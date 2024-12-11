@@ -58,7 +58,7 @@ const Contacto: React.FC = () => {
             <p>Valentina Manríquez</p>
           </div>
           <div className="flex items-center">
-            <img src="img/menu.png" alt="Creador 3" className="w-10 h-10 mr-4" />
+            <img src="img/simon.jpg" alt="Creador 3" className="w-10 h-10 mr-4" />
             <p>Simón Jiménez</p>
           </div>
         </div>
