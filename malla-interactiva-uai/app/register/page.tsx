@@ -17,6 +17,17 @@ const Register: React.FC = () => {
     setError("");
     setSuccess("");
 
+    // Verificaciones de la contraseña
+    if (password.length <= 8) {
+      setError("La contraseña debe tener más de 8 caracteres.");
+      return;
+    }
+
+    if (/^\d+$/.test(password)) {
+      setError("La contraseña no puede contener solo números.");
+      return;
+    }
+
     try {
       const res = await fetch("/api/register", {
         method: "POST",
