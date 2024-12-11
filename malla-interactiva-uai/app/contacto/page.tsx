@@ -40,7 +40,7 @@ const Contacto: React.FC = () => {
   };
 
   return (
-    <div className="text-center bg-black text-white min-h-screen flex flex-col items-center font-sans">
+    <div className="text-center bg-black bg-no-repeat bg-cover text-white min-h-screen flex flex-col items-center font-sans" style={{ backgroundImage: "url('img/uai1.jpeg')", backgroundPosition: 'center', opacity:1 }}>
       <Header
         mallas={[]}
         selectedMalla="Ingeniería UAI"

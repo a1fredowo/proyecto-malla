@@ -96,7 +96,7 @@ const MainContent: React.FC<{ selectedMalla: string; setSelectedMalla: (malla: s
   }, [completedCourses, courses]);
 
   return (
-    <div className="text-center bg-black bg-no-repeat bg-cover text-white min-h-screen flex flex-col items-center font-sans" style={{ backgroundImage: "url('https://i.ytimg.com/vi/Xj4oH1qug4Q/maxresdefault.jpg')", opacity:1 }}>
+    <div className="text-center bg-black bg-no-repeat bg-cover text-white min-h-screen flex flex-col items-center font-sans" style={{ backgroundImage: "url('img/uai1.jpeg')", backgroundPosition: 'center', opacity:1 }}>
       <Header
         mallas={Object.keys(mallas)}
         selectedMalla={selectedMalla}
